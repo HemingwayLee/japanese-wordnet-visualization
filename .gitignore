@@ -1,0 +1,23 @@
+### OSX ###
+.DS_Store
+.AppleDouble
+.LSOverride
+
+### Django ###
+__pycache__
+migrations
+
+db.sqlite3
+*.log
+*.pyc
+/venv
+
+### IDE ###
+/.vscode
+
+### Environment ###
+.env
+
+### Windows ###
+Thumbs.db
+ehthumbs.db
