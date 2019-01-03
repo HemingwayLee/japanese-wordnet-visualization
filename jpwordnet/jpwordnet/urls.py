@@ -19,5 +19,5 @@ from myapp import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('hello/<str:lemma>', views.hello),
+    path('words/<str:lemma>', views.get_words),
 ]

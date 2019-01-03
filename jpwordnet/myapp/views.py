@@ -1,15 +1,13 @@
-from django.http import HttpResponse
-
+import json
+from django.http import HttpResponse, JsonResponse
 from .core import WordnetWrapper
 
-def hello(request, lemma):
+def get_words(request, lemma):
     try:
-        print(lemma)
         wrapper = WordnetWrapper()
         words = wrapper.getWords(lemma)
-        print(words)
 
-        return HttpResponse(status=200)
+        return JsonResponse(words, safe=False, status=200)
     except Exception as ex:
         print(ex)
         return HttpResponse(status=500)
