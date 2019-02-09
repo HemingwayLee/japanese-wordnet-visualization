@@ -19,5 +19,6 @@ from myapp import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('', views.index),
     path('words/<str:lemma>', views.get_words),
 ]
