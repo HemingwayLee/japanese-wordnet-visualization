@@ -9,36 +9,191 @@
     .empty {
       border: solid 2px red;
     }
+
+    .link {
+      stroke: #555555;
+    }
+
+    .node text {
+      stroke: #000000;
+      cursor: pointer;
+    }
+
+    .node circle{
+      stroke: #555555;
+      stroke-width: 2px;
+      fill: red;
+    }
   </style>
+  <script src="http://d3js.org/d3.v2.min.js?2.9.3"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
   <script>
+    const width = 500, height = 500;
+    var svg = null;
+    var force = null;
+    
+    function getWordJson() {
+      $.ajax({
+        type: 'GET',
+        dataType: 'json',
+        url: "http://127.0.0.1:8000/word/" + $('#word').val(),
+        success: function(data) {
+          // console.log(data);
+          $('#json_res').html(JSON.stringify(data, undefined, 2));
+        },
+        error: function(XMLHttpRequest, textStatus, errorThrown) {
+          $('#ans').text(`${textStatus}`);
+        },
+      });
+    }
+    
+    function getWordSense() {
+      // $.ajax({
+      //   type: 'GET',
+      //   dataType: 'json',
+      //   url: "http://127.0.0.1:8000/network/" + $('#word').val(),
+      //   success: function(data) {
+      //     console.log(JSON.stringify(data));
+      //     // $('#json_res').html(JSON.stringify(data, undefined, 2));
+      //   },
+      //   error: function(XMLHttpRequest, textStatus, errorThrown) {
+      //     $('#ans').text(`${textStatus}`);
+      //   },
+      // });
+      d3.json("http://127.0.0.1:8000/network/" + $('#word').val(), function(json) {
+        force.nodes(json.nodes)
+          .links(json.links)
+          .start();
+
+        var link = svg.selectAll(".link")
+          .data(json.links)
+          .enter()
+          .append("line")
+          .attr("class", "link")
+          .style("stroke-width", function(d) { return Math.sqrt(d.weight); });
+
+        var node = svg.selectAll(".node")
+          .data(json.nodes)
+          .enter()
+          .append("g")
+          .attr("class", "node")
+          .call(force.drag);
+
+        node.append("circle")
+          .attr("r","5");
+
+        node.append("text")
+          .attr("dx", 12)
+          .attr("dy", ".35em")
+          .text(function(d) { return d.name });
+
+        force.on("tick", function() {
+          link
+            .attr("x1", function(d) { return d.source.x; })
+            .attr("y1", function(d) { return d.source.y; })
+            .attr("x2", function(d) { return d.target.x; })
+            .attr("y2", function(d) { return d.target.y; });
+
+          node.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+        });
+      });
+    }
+
     function getWordnet() {
       if (!$('#word').val()) {
         $('#word').addClass("empty");
       } else {
         $('#word').removeClass("empty");
-        $.ajax({
-          type: 'GET',
-          dataType: 'json',
-          url: "http://127.0.0.1:8000/words/" + $('#word').val(),
-          success: function(data) {
-            // console.log(data);
-            $('#json_res').html(JSON.stringify(data, undefined, 2));
-          },
-          error: function(XMLHttpRequest, textStatus, errorThrown) {
-            $('#ans').text(`${textStatus}`);
-          },
-        });
+        getWordJson();
+        getWordSense();
       }
     }
 
+    function getTableCount(tbl) {
+      $.ajax({
+        type: 'GET',
+        dataType: 'json',
+        url: `http://127.0.0.1:8000/tbl/count/${tbl}`,
+        success: function(data) {
+          console.log(data);
+        },
+        error: function(xhr, textStatus, errorThrown) {
+          $('#ans').text(`[${xhr.status}] ${xhr.responseText}`);
+        },
+      });
+    }
+
+    function insertThead(ele, parent) {
+      var tr = $('<tr>');
+      for (var key in ele) {          
+        tr.append($('<td>').text(key));
+      }
+      tr.appendTo(parent);
+    }
+
+    function insertTbody(ele, parent) {
+      var tr = $('<tr>');  
+      for (const [key, value] of Object.entries(ele)) {
+        res = (value)? value : "null";
+        tr.append($(`<td>`).text(res));
+      }
+      tr.appendTo(parent);
+    }
+
+    function getTableRow(tbl, limit, offset) {
+      $.ajax({
+        type: 'GET',
+        dataType: 'json',
+        url: `http://127.0.0.1:8000/tbl/rows/${tbl}/${limit}/${offset}`,
+        success: function(data) {
+          $("<h2>").text(tbl).appendTo("#tables");
+          var table = $('<table border=1>');
+          var thead = $('<thead>');
+          var tbody = $('<tbody>');
+          $.each(JSON.parse(data), function(idx, ele) {
+            if (idx == 0) {
+              insertThead(ele, thead);
+            }
+            insertTbody(ele, tbody);
+          });
+          table.append(thead);
+          table.append(tbody);
+          table.appendTo("#tables")
+        },
+        error: function(xhr, textStatus, errorThrown) {
+          $('#ans').text(`[${xhr.status}] ${xhr.responseText}`);
+        },
+      });
+    }
+
+
     $(document).ready(function() {
       $('#getdata').on('click', getWordnet);
+      
+      // getTableCount("word");
+      // getTableRow("word", 10, 0);
+      // getTableRow("sense", 10, 0);
+      // getTableRow("synset", 10, 0);
+      // getTableRow("synlink", 10, 0);
+
+      svg = d3.select("body")
+        .append("svg")
+        .attr("width", width)
+        .attr("height", height);
+
+      force = d3.layout
+        .force()
+        .gravity(.05)
+        .distance(100)
+        .charge(-100)
+        .size([width, height]);
     });
   </script>
 </head>
 <body>
+  <div class="alert alert-danger" id="ans">
+  </div>
   <div>
     <button class="btn btn-success" id="getdata">
       <span class="glyphicon glyphicon-wrench"></span> Get Wordnet Data
@@ -49,6 +204,8 @@
     </div>
     <hr>
     <pre id="json_res"></pre>
+  </div>
+  <div id="tables">
   </div>
 </body>
 </html>

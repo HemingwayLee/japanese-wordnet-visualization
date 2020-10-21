@@ -2,29 +2,44 @@ import sys
 import sqlite3
 from collections import namedtuple
 
-Word = namedtuple('Word', 'wordid lang lemma pron pos')
+def dict_factory(cursor, row):
+    d = {}
+    for idx, col in enumerate(cursor.description):
+        d[col[0]] = row[idx]
+    return d
+
+# Word = namedtuple('Word', 'wordid lang lemma pron pos')
 Sense = namedtuple('Sense', 'synset wordid lang rank lexid freq src')
 
 class WordnetWrapper:
     # Only query
     conn = sqlite3.connect("wnjpn.db", check_same_thread=False)
+    conn.row_factory = dict_factory
     
-    def getWords(self, lemma):
-        words = []
-        cur = self.conn.execute("select * from word where lemma=?", (lemma,))
+    def getTblCount(self, tbl):
+        cur = self.conn.execute('SELECT COUNT(*) AS count FROM {}'.format(tbl))
         row = cur.fetchone()
-        while row:
-            words.append(Word(*row))
-            row = cur.fetchone()
-        return words
+        return row
 
-    # def getWord(wordid):
-    #     cur = conn.execute("select * from word where wordid=?", (wordid,))
-    #     return Word(*cur.fetchone())
+    def getTblRows(self, tbl, count, skip):
+        cur = self.conn.execute("SELECT * FROM {} LIMIT {} OFFSET {}".format(tbl, count, skip))
+        rows = cur.fetchall()
+        return rows
+
+    def getWords(self, lemma):
+        cur = self.conn.execute("SELECT * FROM word WHERE lemma=?", (lemma,))
+        rows = cur.fetchall()
+        return rows
+
+    def getWordSense(self, lemma):
+        cur = self.conn.execute("SELECT w.lemma, s.synset FROM word AS w INNER JOIN sense AS s ON w.wordid = s.wordid WHERE w.lemma=?", (lemma,))
+        rows = cur.fetchall()
+        print(rows)
+        return rows
     
     def getSenses(self, wid, lang='jpn'):
         senses = []
-        cur = self.conn.execute("select * from sense where wordid=? and lang=?", (wid, lang))
+        cur = self.conn.execute("SELECT * FROM sense WHERE wordid=? and lang=?", (wid, lang))
         row = cur.fetchone()
         while row:
             senses.append(Sense(*row))
@@ -32,7 +47,7 @@ class WordnetWrapper:
         return senses
 
     # def getSense(synset, lang='jpn'):
-    #     cur = conn.execute("select * from sense where synset=? and lang=?",
+    #     cur = conn.execute("SELECT * FROM sense WHERE synset=? and lang=?",
     #         (synset,lang))
     #     row = cur.fetchone()
     #     if row:
@@ -43,7 +58,7 @@ class WordnetWrapper:
     # Synset = namedtuple('Synset', 'synset pos name src')
 
     # def getSynset(synset):
-    #     cur = conn.execute("select * from synset where synset=?", (synset,))
+    #     cur = conn.execute("SELECT * FROM synset WHERE synset=?", (synset,))
     #     row = cur.fetchone()
     #     if row:
     #         return Synset(*row)
@@ -54,7 +69,7 @@ class WordnetWrapper:
 
     # def getSynLinks(sense, link):
     #     synLinks = []
-    #     cur = conn.execute("select * from synlink where synset1=? and link=?", (sense.synset, link))
+    #     cur = conn.execute("SELECT * FROM synlink WHERE synset1=? and link=?", (sense.synset, link))
     #     row = cur.fetchone()
     #     while row:
     #         synLinks.append(SynLink(*row))

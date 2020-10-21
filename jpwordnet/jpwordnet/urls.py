@@ -20,5 +20,8 @@ from myapp import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.index),
-    path('words/<str:lemma>', views.get_words),
+    path('network/<str:lemma>', views.getNetwork),
+    path('word/<str:lemma>', views.getWords),
+    path('tbl/count/<str:tbl>', views.getTblCount),
+    path('tbl/rows/<str:tbl>/<int:limit>/<int:offset>', views.getTblRows),
 ]
