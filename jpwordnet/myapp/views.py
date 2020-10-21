@@ -35,7 +35,7 @@ def getWords(request, lemma):
 
 def getNetwork(request, lemma):
     try:
-        words = wrapper.getWordSense(lemma)
+        words = wrapper.getWordWithSense(lemma)
         return JsonResponse(_translate(lemma, words), safe=False, status=200)
     except Exception:
         print(traceback.format_exc())
@@ -44,10 +44,19 @@ def getNetwork(request, lemma):
 
 def _translate(lemma, words):
     links = []
-    nodes = [{"name": lemma}]
-    for idx, ws in enumerate(words):
-        nodes.append({"name": ws["synset"]})
-        links.append({"source": 0, "target": idx+1, "weight": 1})
+    nodes = [{"name": lemma, "color": "red"}]
+    idx = 1
+    for ws in words:
+        currIdx = idx
+
+        nodes.append({"name": ws["synset"], "color": "blue"})
+        links.append({"source": 0, "target": idx, "weight": 1})
+        newWords = wrapper.getSenseWithWord(ws["synset"], lemma)
+        idx = idx + 1
+        for nws in newWords:
+            nodes.append({"name": nws["lemma"], "color": "red"})
+            links.append({"source": currIdx, "target": idx, "weight": 1})
+            idx = idx + 1
     
     res = { "nodes": nodes, "links": links }
     print(res)

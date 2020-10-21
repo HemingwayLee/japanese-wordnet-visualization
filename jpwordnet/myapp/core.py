@@ -31,8 +31,14 @@ class WordnetWrapper:
         rows = cur.fetchall()
         return rows
 
-    def getWordSense(self, lemma):
-        cur = self.conn.execute("SELECT w.lemma, s.synset FROM word AS w INNER JOIN sense AS s ON w.wordid = s.wordid WHERE w.lemma=?", (lemma,))
+    def getWordWithSense(self, lemma, lang='jpn'):
+        cur = self.conn.execute("SELECT w.lemma, s.synset FROM word AS w INNER JOIN sense AS s ON w.wordid = s.wordid WHERE w.lemma=? AND w.lang=?", (lemma, lang))
+        rows = cur.fetchall()
+        print(rows)
+        return rows
+
+    def getSenseWithWord(self, synset, lemma, lang='jpn'):
+        cur = self.conn.execute("SELECT w.lemma, s.synset FROM word AS w INNER JOIN sense AS s ON w.wordid = s.wordid WHERE s.synset=? AND w.lemma!=? AND w.lang=?", (synset,lemma, lang))
         rows = cur.fetchall()
         print(rows)
         return rows

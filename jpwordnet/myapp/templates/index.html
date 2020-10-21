@@ -22,14 +22,17 @@
     .node circle{
       stroke: #555555;
       stroke-width: 2px;
-      fill: red;
+    }
+
+    body {
+      width: 602px;
     }
   </style>
   <script src="http://d3js.org/d3.v2.min.js?2.9.3"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
   <script>
-    const width = 500, height = 500;
+    const width = 600, height = 400;
     var svg = null;
     var force = null;
     
@@ -49,18 +52,6 @@
     }
     
     function getWordSense() {
-      // $.ajax({
-      //   type: 'GET',
-      //   dataType: 'json',
-      //   url: "http://127.0.0.1:8000/network/" + $('#word').val(),
-      //   success: function(data) {
-      //     console.log(JSON.stringify(data));
-      //     // $('#json_res').html(JSON.stringify(data, undefined, 2));
-      //   },
-      //   error: function(XMLHttpRequest, textStatus, errorThrown) {
-      //     $('#ans').text(`${textStatus}`);
-      //   },
-      // });
       d3.json("http://127.0.0.1:8000/network/" + $('#word').val(), function(json) {
         force.nodes(json.nodes)
           .links(json.links)
@@ -81,7 +72,8 @@
           .call(force.drag);
 
         node.append("circle")
-          .attr("r","5");
+          .attr("r","5")
+          .style("fill", function(d) { return d.color });
 
         node.append("text")
           .attr("dx", 12)
@@ -180,7 +172,8 @@
       svg = d3.select("body")
         .append("svg")
         .attr("width", width)
-        .attr("height", height);
+        .attr("height", height)
+        .style("border", "solid 1px black");
 
       force = d3.layout
         .force()
