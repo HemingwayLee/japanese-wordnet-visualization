@@ -1,29 +1,40 @@
 # japanese-wordnet-visualization
 
-# Download sqlite3 database
+## Download sqlite3 database
 http://compling.hss.ntu.edu.sg/wnja/jpn/downloads.html
 
-# Use command-line `sqlite3` to see the data
-## Open `wnjpn.db` database
+## How to run the webapp
+```
+virtualenv venv
+source venv/bin/activate
+pip3 install django
+python3 manage.py migrate
+python3 manage.py runserver
+```
+
+![jp_wordnet_demo](https://github.com/HemingwayLee/japanese-wordnet-visualization/blob/master/img/demo.png?raw=true)
+
+## Use command-line `sqlite3` to see the data
+### Open `wnjpn.db` database
 ```
 sqlite3 wnjpn.db 
 ```
 
-## Explore the `wnjpn.db` database
-### show the database
+### Explore the `wnjpn.db` database
+* show the database
 ```
 sqlite> .database
 main: /path/to/project/japanese-wordnet-visualization/jpwordnet/wnjpn.db
 ```
 
-### show all tables
+* show all tables
 ```
 sqlite> .table
 ancestor    pos_def     synlink     synset_def  variant     xlink     
 link_def    sense       synset      synset_ex   word    
 ```
 
-### show rows in a table 
+* show rows in a table 
 ```
 sqlite> select * from word limit 3;
 1|eng|expletive||n
@@ -35,7 +46,7 @@ sqlite> select * from word where lang='jpn' limit 3;
 155290|jpn|大砲||n
 ```
 
-### show the table schema
+* show the table schema
 ```
 sqlite> .schema word
 CREATE TABLE word (wordid integer primary key,
@@ -48,10 +59,11 @@ CREATE INDEX word_lemma_idx ON word (lemma);
 sqlite> .exit
 ```
 
-# Use [sqleton](https://github.com/inukshuk/sqleton) to see the data
+## Use [sqleton](https://github.com/inukshuk/sqleton) to see the data
 ```
 npm install -g sqleton
 sqleton -o wnjpn.png wnjpn.db 
 ```
 
-## Result
+![wnjpn_diagram](https://raw.githubusercontent.com/HemingwayLee/japanese-wordnet-visualization/master/img/wnjpn.png)
+
