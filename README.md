@@ -59,7 +59,7 @@ CREATE INDEX word_lemma_idx ON word (lemma);
 sqlite> .exit
 ```
 
-## Use [sqleton](https://github.com/inukshuk/sqleton) to see the data
+## Use [sqleton](https://github.com/inukshuk/sqleton) to see the table schema
 ```
 npm install -g sqleton
 sqleton -o wnjpn.png wnjpn.db 
