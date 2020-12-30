@@ -34,7 +34,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           push: true
-          tags: ${{ github.repository_owner }}/${{ env.IMAGE_NAME }}:1.0.${{ github.run_number }}
+          tags: hemingwaylee/${{ env.IMAGE_NAME }}:1.0.${{ github.run_number }}
           # secrets: |
           #   GIT_AUTH_TOKEN=${{ github.token }}
         # uses: docker/build-push-action@v1
