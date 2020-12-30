@@ -13,6 +13,9 @@ jobs:
     steps:
       - name: PrepareReg Names
         run: |
+          echo "------"
+          echo ${{ secrets.CR_PAT }}
+          echo "------"
           echo IMAGE_REPOSITORY=$(echo ${{ github.repository }} | tr '[:upper:]' '[:lower:]') >> $GITHUB_ENV
           echo IMAGE_TAG=$(echo ${{ github.ref }} | tr '[:upper:]' '[:lower:]' | awk '{split($0,a,"/"); print a[3]}') >> $GITHUB_ENV
       - name: Set up Docker Buildx
