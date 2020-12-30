@@ -1,8 +1,6 @@
 name: Publish Docker image
 on:
   push: {branches: main}
-  it will be triggered by release
-   release is based on tag
   # release:
   #   types: [published]
 jobs:
