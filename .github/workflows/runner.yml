@@ -31,8 +31,8 @@ jobs:
       - name: Push to GitHub Packages
         uses: docker/build-push-action@v2
         with:
-          context: .
-          file: ./Dockerfile
+          # context: .
+          # file: ./Dockerfile
           push: true
           tags: ghcr.io/hemingwaylee/${{ env.IMAGE_NAME }}:1.0.${{ github.run_number }}
           # secrets: |
