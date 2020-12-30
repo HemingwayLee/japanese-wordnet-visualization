@@ -31,8 +31,8 @@ jobs:
         with:
           push: true
           tags: ${{ env.IMAGE_REPOSITORY }}/${{ env.IMAGE_NAME }}:1.0.${{ github.run_number }}
-          secrets: |
-            GIT_AUTH_TOKEN=${{ github.token }}
+          # secrets: |
+          #   GIT_AUTH_TOKEN=${{ github.token }}
         # uses: docker/build-push-action@v1
         # with:
         #   username: ${{ github.actor }}
