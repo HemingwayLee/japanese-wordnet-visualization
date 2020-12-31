@@ -35,11 +35,12 @@ jobs:
         with:
           # context: .
           # file: ./Dockerfile
-          push: true
-          tags: hemingwaylee/${{ env.IMAGE_NAME }}:latest
+          load: true
+          tags: ghcr.io/hemingwaylee/${{ env.IMAGE_NAME }}:latest
           # tags: ghcr.io/hemingwaylee/${{ env.IMAGE_NAME }}:1.0.${{ github.run_number }}
           # secrets: |
           #   GIT_AUTH_TOKEN=${{ github.token }}
+        run: docker push ghcr.io/hemingwaylee/${{ env.IMAGE_NAME }}:latest
         # uses: docker/build-push-action@v1
         # with:
         #   username: ${{ github.actor }}
