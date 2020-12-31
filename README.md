@@ -67,3 +67,5 @@ sqleton -o wnjpn.png wnjpn.db
 
 ![wnjpn_diagram](https://raw.githubusercontent.com/HemingwayLee/japanese-wordnet-visualization/master/img/wnjpn.png)
 
+# Note
+* There are github container and github docker package. They has not been completed yet
