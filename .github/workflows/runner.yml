@@ -36,7 +36,7 @@ jobs:
           # context: .
           # file: ./Dockerfile
           push: true
-          tags: ghcr.io/hemingwaylee/${{ env.IMAGE_NAME }}:latest
+          tags: hemingwaylee/${{ env.IMAGE_NAME }}:latest
           # tags: ghcr.io/hemingwaylee/${{ env.IMAGE_NAME }}:1.0.${{ github.run_number }}
           # secrets: |
           #   GIT_AUTH_TOKEN=${{ github.token }}
