@@ -1,13 +1,18 @@
+import os
 import json
 import traceback
 from django.shortcuts import render
+from dotenv import load_dotenv
 from django.http import HttpResponse, JsonResponse
 from .core import WordnetWrapper
 
 wrapper = WordnetWrapper()
 
 def index(request):
-    return render(request, 'index.html')
+    load_dotenv("./jpwordnet/.env")
+    return render(request, 'index.html', {
+        "WEBAPP_ADDRESS": os.environ.get("WEBAPP_ADDRESS")
+    })
 
 def getTblCount(request, tbl):
     try:

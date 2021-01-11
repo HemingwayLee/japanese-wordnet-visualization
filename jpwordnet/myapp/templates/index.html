@@ -40,7 +40,7 @@
       $.ajax({
         type: 'GET',
         dataType: 'json',
-        url: "http://127.0.0.1:8000/word/" + $('#word').val(),
+        url: "http://{{WEBAPP_ADDRESS}}:8000/word/" + $('#word').val(),
         success: function(data) {
           // console.log(data);
           $('#json_res').html(JSON.stringify(data, undefined, 2));
@@ -52,7 +52,7 @@
     }
     
     function getWordSense() {
-      d3.json("http://127.0.0.1:8000/network/" + $('#word').val(), function(json) {
+      d3.json("http://{{WEBAPP_ADDRESS}}:8000/network/" + $('#word').val(), function(json) {
         force.nodes(json.nodes)
           .links(json.links)
           .start();
@@ -106,7 +106,7 @@
       $.ajax({
         type: 'GET',
         dataType: 'json',
-        url: `http://127.0.0.1:8000/tbl/count/${tbl}`,
+        url: `http://{{WEBAPP_ADDRESS}}:8000/tbl/count/${tbl}`,
         success: function(data) {
           console.log(data);
         },
@@ -137,7 +137,7 @@
       $.ajax({
         type: 'GET',
         dataType: 'json',
-        url: `http://127.0.0.1:8000/tbl/rows/${tbl}/${limit}/${offset}`,
+        url: `http://{{WEBAPP_ADDRESS}}:8000/tbl/rows/${tbl}/${limit}/${offset}`,
         success: function(data) {
           $("<h2>").text(tbl).appendTo("#tables");
           var table = $('<table border=1>');
