@@ -49,17 +49,17 @@ def getNetwork(request, lemma):
 
 def _translate(lemma, words):
     links = []
-    nodes = [{"name": lemma, "color": "red"}]
+    nodes = [{"name": lemma, "color": "red", "type": "word"}]
     idx = 1
     for ws in words:
         currIdx = idx
 
-        nodes.append({"name": ws["synset"], "color": "blue"})
+        nodes.append({"name": ws["synset"], "color": "blue", "type": "synset"})
         links.append({"source": 0, "target": idx, "weight": 1})
         newWords = wrapper.getSenseWithWord(ws["synset"], lemma)
         idx = idx + 1
         for nws in newWords:
-            nodes.append({"name": nws["lemma"], "color": "red"})
+            nodes.append({"name": nws["lemma"], "color": "red", "type": "word"})
             links.append({"source": currIdx, "target": idx, "weight": 1})
             idx = idx + 1
     

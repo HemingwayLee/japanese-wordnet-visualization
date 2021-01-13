@@ -28,13 +28,19 @@
       width: 602px;
     }
   </style>
-  <script src="http://d3js.org/d3.v2.min.js?2.9.3"></script>
+  <!-- force in d3v4 changed a lot, use v3 for now -->
+  <script src="https://d3js.org/d3.v3.min.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
   <script>
     const width = 600, height = 400;
     var svg = null;
     var force = null;
+
+    function showErrorMsg(xhr) {
+      $('#ans').text(`[${xhr.status}] ${xhr.responseText}`);
+      $('#ans').show()
+    }
     
     function getWordJson() {
       $.ajax({
@@ -45,8 +51,8 @@
           // console.log(data);
           $('#json_res').html(JSON.stringify(data, undefined, 2));
         },
-        error: function(XMLHttpRequest, textStatus, errorThrown) {
-          $('#ans').text(`${textStatus}`);
+        error: function(xhr, textStatus, errorThrown) {
+          showErrorMsg(xhr);
         },
       });
     }
@@ -73,7 +79,13 @@
 
         node.append("circle")
           .attr("r","5")
-          .style("fill", function(d) { return d.color });
+          .style("fill", function(d) { return d.color })
+          .on("click", function(d) { 
+            if (d.type == "word") {
+              $('#word').val(d.name);
+              getWordnet();
+            }  
+          });
 
         node.append("text")
           .attr("dx", 12)
@@ -97,6 +109,7 @@
         $('#word').addClass("empty");
       } else {
         $('#word').removeClass("empty");
+        svg.selectAll("*").remove();
         getWordJson();
         getWordSense();
       }
@@ -111,7 +124,7 @@
           console.log(data);
         },
         error: function(xhr, textStatus, errorThrown) {
-          $('#ans').text(`[${xhr.status}] ${xhr.responseText}`);
+          showErrorMsg(xhr);
         },
       });
     }
@@ -154,13 +167,14 @@
           table.appendTo("#tables")
         },
         error: function(xhr, textStatus, errorThrown) {
-          $('#ans').text(`[${xhr.status}] ${xhr.responseText}`);
+          showErrorMsg(xhr);
         },
       });
     }
 
 
     $(document).ready(function() {
+      $('#ans').hide();
       $('#getdata').on('click', getWordnet);
       
       // getTableCount("word");
