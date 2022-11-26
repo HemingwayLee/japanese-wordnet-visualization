@@ -27,6 +27,8 @@ python3 manage.py runserver
 ```
 
 * Access the web application `http://127.0.0.1:8000/`
+  * Type Japanese word in the textbox
+  * You can click red dots on the visualization if you want to search for the words
 ![jp_wordnet_demo](https://github.com/HemingwayLee/japanese-wordnet-visualization/blob/master/img/demo.png?raw=true)
 
 ## Use command-line `sqlite3` to see the data
