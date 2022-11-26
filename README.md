@@ -1,5 +1,6 @@
 # japanese-wordnet-visualization
 * This project visualizes the [Japanese Wordnet](https://bond-lab.github.io/wnja/) (日本語ワードネット) with web application built by Django
+* The demo page is [here](http://35.78.115.229:8000/)
 
 ## How to run this project
 ### Locally
