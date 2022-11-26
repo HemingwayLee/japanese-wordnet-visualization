@@ -4,11 +4,19 @@
 ## How to run this project
 ### Locally
 * git clone this project
-* download Japanese Wordnet sqlite3 database from official [web stie](https://bond-lab.github.io/wnja/jpn/downloads.html)
+* download Japanese Wordnet sqlite3 database from [official webstie](https://bond-lab.github.io/wnja/jpn/downloads.html)
+* uncompress sqlite3 database and move the file into `japanese-wordnet-visualization/jpwordnet` folder like below:
+```
+~/wordnet/japanese-wordnet-visualization/jpwordnet$ ls
+jpwordnet  manage.py  myapp  wnjpn.db
+```
+
+* run the following commands to start the web application
 ```
 virtualenv venv
 source venv/bin/activate
-pip3 install django
+pip3 install -r requirements.txt 
+cd jpwordnet/
 python3 manage.py migrate
 python3 manage.py runserver
 ```
