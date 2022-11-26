@@ -1,14 +1,22 @@
 # japanese-wordnet-visualization
-* This project visualizes the [Japanese Wordnet](https://bond-lab.github.io/wnja/) (日本語ワードネット)
+* This project visualizes the [Japanese Wordnet](https://bond-lab.github.io/wnja/) (日本語ワードネット) with web application built by Django
 
-## Download Japanese Wordnet sqlite3 database
-https://bond-lab.github.io/wnja/jpn/downloads.html
+## How to run this project
+### Locally
+* git clone this project
+* download Japanese Wordnet sqlite3 database from [official webstie](https://bond-lab.github.io/wnja/jpn/downloads.html)
+* uncompress sqlite3 database and move the file into `japanese-wordnet-visualization/jpwordnet` folder like below:
+```
+~/wordnet/japanese-wordnet-visualization/jpwordnet$ ls
+jpwordnet  manage.py  myapp  wnjpn.db
+```
 
-## How to run the webapp
+* run the following commands to start the web application
 ```
 virtualenv venv
 source venv/bin/activate
-pip3 install django
+pip3 install -r requirements.txt 
+cd jpwordnet/
 python3 manage.py migrate
 python3 manage.py runserver
 ```
