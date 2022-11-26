@@ -10,6 +10,10 @@
 ~/wordnet/japanese-wordnet-visualization/jpwordnet$ ls
 jpwordnet  manage.py  myapp  wnjpn.db
 ```
+* create a `.env` file in `~/japanese-wordnet-visualization/jpwordnet/jpwordnet/` folder, and put the following content into `.env` file
+```
+WEBAPP_ADDRESS=127.0.0.1
+```
 
 * run the following commands to start the web application
 ```
@@ -21,6 +25,7 @@ python3 manage.py migrate
 python3 manage.py runserver
 ```
 
+* Access the web application `http://127.0.0.1:8000/`
 ![jp_wordnet_demo](https://github.com/HemingwayLee/japanese-wordnet-visualization/blob/master/img/demo.png?raw=true)
 
 ## Use command-line `sqlite3` to see the data
