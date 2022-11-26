@@ -1,7 +1,8 @@
 # japanese-wordnet-visualization
+* This project visualizes the [Japanese Wordnet](https://bond-lab.github.io/wnja/) (日本語ワードネット)
 
-## Download sqlite3 database
-http://compling.hss.ntu.edu.sg/wnja/jpn/downloads.html
+## Download Japanese Wordnet sqlite3 database
+https://bond-lab.github.io/wnja/jpn/downloads.html
 
 ## How to run the webapp
 ```
